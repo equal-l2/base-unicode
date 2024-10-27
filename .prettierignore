@@ -1,0 +1,5 @@
+# https://stackoverflow.com/a/70715829
+*
+!*.yml
+!*.md
+!*/

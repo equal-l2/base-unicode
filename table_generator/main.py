@@ -14,4 +14,12 @@ def generate_table() -> list[int]:
 
 if __name__ == "__main__":
     table = generate_table()
-    json.dump(table, open("unicode_table.json", "w", encoding="utf-8"))
+    json.dump(
+        table,
+        open(
+            "../src/assets/unicode_table.json",
+            "w",
+            encoding="utf-8",
+        ),
+        separators=(",", ":"),
+    )

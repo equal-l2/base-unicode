@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 .my-input {
-    @apply font-mono border rounded-xl p-1 m-3
+    @apply font-mono border rounded-xl p-1 m-3;
 }
 
 .result {
-    @apply border-black border-2 m-auto px-9 py-5 text-center w-fit rounded-3xl font-black 
+    @apply border-black border-2 m-auto px-9 py-5 text-center w-fit rounded-3xl font-black;
 }
 
 .error {
-    @apply result bg-red-400
+    @apply result bg-red-400;
 }
 
 .normal {
-    @apply result bg-blue-400
+    @apply result bg-blue-400;
 }
 
 .dual-butt {
-    @apply result bg-pink-400
+    @apply result bg-pink-400;
 }
