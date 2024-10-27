@@ -11,13 +11,13 @@
 }
 
 .error {
-    @apply result bg-red-400;
+    @apply result bg-red-500;
 }
 
 .normal {
-    @apply result bg-blue-400;
+    @apply result bg-blue-300;
 }
 
 .dual-butt {
-    @apply result bg-pink-400;
+    @apply result bg-red-300;
 }
