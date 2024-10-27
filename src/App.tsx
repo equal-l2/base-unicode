@@ -70,8 +70,10 @@ function renderResult(inputStr: string, baseStr: string) {
 }
 
 function App() {
-    const [input, setInput] = createSignal("154221029867775");
-    const [base, setBase] = createSignal("3524");
+    // const [input, setInput] = createSignal("154221029867775");
+    // const [base, setBase] = createSignal("3524");
+    const [input, setInput] = createSignal("987654321987654");
+    const [base, setBase] = createSignal("30000");
     return (
         <>
             <main class="subpixel-antialiased m-auto">
