@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import conversionTable from "../../table_generator/unicode_table.json";
+import conversionTable from "./assets/unicode_table.json";
 
 const maxBase = conversionTable.length;
 
