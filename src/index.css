@@ -11,11 +11,11 @@
 }
 
 .error {
-    @apply result bg-red-500;
+    @apply result bg-error;
 }
 
 .normal {
-    @apply result bg-blue-300;
+    @apply result bg-info-content;
 }
 
 .dual-butt {

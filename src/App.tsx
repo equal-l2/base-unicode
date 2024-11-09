@@ -1,7 +1,5 @@
 import {
     type Component,
-    createComputed,
-    createEffect,
     createMemo,
     createSignal,
     Match,
@@ -21,40 +19,51 @@ const NumberToUnicodeResult: Component<{
     base: string;
 }> = (props) => {
     const input = createMemo(() => Number.parseInt(props.input));
-    if (Number.isNaN(input())) {
-        return <p class="error">入力数字が異常です</p>;
-    }
-    if (input() < 0 || Number.MAX_SAFE_INTEGER < input()) {
-        return (
-            <p class="error">
-                入力数字は<span class="font-mono">0</span>~
-                <span class="font-mono">{Number.MAX_SAFE_INTEGER}</span>
-                の整数で指定してください
-            </p>
-        );
-    }
+    const invalidInput = () => Number.isNaN(input());
+    const inputOutOfRange = () =>
+        input() < 0 || Number.MAX_SAFE_INTEGER < input();
 
     const base = createMemo(() => Number.parseInt(props.base));
-    if (Number.isNaN(base())) {
-        return <p class="error">基数が異常です</p>;
-    }
-    if (base() < 2 || maxBase < base()) {
-        return (
-            <p class="error">
-                基数は<span class="font-mono">2</span>~
-                <span class="font-mono">{maxBase}</span>の整数で指定してください
-            </p>
-        );
-    }
+    const invalidBase = () => Number.isNaN(base());
+    const baseOutOfRange = () => base() < 2 || maxBase < base();
 
     const digits = () => convertBase(input(), base());
     const unicode = () => convertToUnicodeBase(digits());
 
     const has_dual_butt = () => unicode().includes("ဣ");
+    const DefaultElement = () => {
+        return (
+            <p class={has_dual_butt() ? "dual-butt" : "normal"}>
+                <span class="text-4xl leading-relaxed">{unicode()}</span>
+            </p>
+        );
+    };
+
     return (
-        <p class={has_dual_butt() ? "dual-butt" : "normal"}>
-            <span class="text-4xl leading-relaxed">{unicode()}</span>
-        </p>
+        <>
+            <Switch fallback={<DefaultElement />}>
+                <Match when={invalidInput()}>
+                    <p class="error">入力数字が異常です</p>
+                </Match>
+                <Match when={inputOutOfRange()}>
+                    <p class="error">
+                        入力数字は<span class="font-mono">0</span>~
+                        <span class="font-mono">{Number.MAX_SAFE_INTEGER}</span>
+                        の整数で指定してください
+                    </p>
+                </Match>
+                <Match when={invalidBase()}>
+                    <p class="error">基数が異常です</p>
+                </Match>
+                <Match when={baseOutOfRange()}>
+                    <p class="error">
+                        基数は<span class="font-mono">2</span>~
+                        <span class="font-mono">{maxBase}</span>
+                        の整数で指定してください
+                    </p>
+                </Match>
+            </Switch>
+        </>
     );
 };
 
@@ -96,30 +105,43 @@ const UnicodeToNumberResult: Component<{
     base: string;
 }> = (props) => {
     const base = createMemo(() => Number.parseInt(props.base));
-    if (Number.isNaN(base())) {
-        return <p class="error">基数が異常です</p>;
-    }
-    if (base() < 2 || maxBase < base()) {
-        return (
-            <p class="error">
-                基数は<span class="font-mono">2</span>~
-                <span class="font-mono">{maxBase}</span>の整数で指定してください
-            </p>
-        );
-    }
+    const invalidBase = () => Number.isNaN(base());
+    const baseOutOfRange = () => base() < 2 || maxBase < base();
 
     const digits = () => stringToDigits(props.input);
+    const hasInvalidChar = () => typeof digits() === "string";
     const number = () => digitsToNumber(digits() as number[], base());
+    const tooLargeDigit = () => typeof number() === "string";
 
     const has_dual_butt = () => props.input.includes("ဣ");
+
+    const DefaultElement = () => {
+        return (
+            <p class={has_dual_butt() ? "dual-butt" : "normal"}>
+                <span class="text-4xl leading-relaxed">{number()}</span>
+            </p>
+        );
+    };
+
     return (
-        <Switch>
-            <Match when={typeof digits() === "string"}>
+        <Switch fallback={<DefaultElement />}>
+            <Match when={invalidBase()}>
+                <p class="error">基数が異常です</p>
+            </Match>
+            <Match when={baseOutOfRange()}>
+                <p class="error">
+                    基数は<span class="font-mono">2</span>~
+                    <span class="font-mono">{maxBase}</span>
+                    の整数で指定してください
+                </p>
+            </Match>
+            <Match when={hasInvalidChar()}>
                 <p class="error">使用できない文字(空白など)が含まれています</p>
             </Match>
-            <Match when={typeof digits() !== "string"}>
-                <p class={has_dual_butt() ? "dual-butt" : "normal"}>
-                    <span class="text-4xl leading-relaxed">{number()}</span>
+            <Match when={tooLargeDigit()}>
+                <p class="error">
+                    基数が小さすぎます（
+                    {Number.parseInt(number() as string) + 1} 以上が必要です）
                 </p>
             </Match>
         </Switch>

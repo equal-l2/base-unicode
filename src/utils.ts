@@ -27,21 +27,29 @@ export function convertToUnicodeBase(digits: number[]): string {
     return result;
 }
 
-export function stringToDigits(input: string): number[] | string {
+export function stringToDigits(input: string): number[] | null {
     const len = input.length;
     const result: number[] = [];
     for (let i = 0; i < len; i++) {
         const codepoint = input.charCodeAt(i);
         const unshifted = conversionTable.indexOf(codepoint);
         if (unshifted === -1) {
-            return input[i];
+            // Not found
+            return null;
         }
         result.push(conversionTable.indexOf(codepoint));
     }
     return result;
 }
 
-export function digitsToNumber(digits: number[], base: number): number {
+export function digitsToNumber(
+    digits: number[],
+    base: number,
+): number | string {
+    const maxDigit = Math.max(...digits);
+    if (maxDigit >= base) {
+        return maxDigit.toString();
+    }
     let result = 0;
     for (const digit of digits) {
         result = result * base + digit;
