@@ -27,11 +27,15 @@ export function convertToUnicodeBase(digits: number[]): string {
     return result;
 }
 
-export function stringToDigits(input: string): number[] {
+export function stringToDigits(input: string): number[] | string {
     const len = input.length;
     const result: number[] = [];
     for (let i = 0; i < len; i++) {
         const codepoint = input.charCodeAt(i);
+        const unshifted = conversionTable.indexOf(codepoint);
+        if (unshifted === -1) {
+            return input[i];
+        }
         result.push(conversionTable.indexOf(codepoint));
     }
     return result;
