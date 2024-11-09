@@ -1,4 +1,4 @@
-import { convertBase } from "../src/utils";
+import { convertBase, digitsToNumber, stringToDigits } from "../src/utils";
 import { expect, test, describe } from "bun:test";
 
 describe("base conversion test", () => {
@@ -17,5 +17,22 @@ describe("base conversion test", () => {
         expect(convertBase(154221029867775, 3524)).toEqual([
             3523, 3523, 3523, 3523,
         ]);
+    });
+});
+
+describe("reverse conversion test", () => {
+    test('"!" -> 0', () => {
+        expect(stringToDigits("!")).toEqual([0]);
+    });
+
+    test("digits to number", () => {
+        expect(digitsToNumber([1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1], 2)).toEqual(
+            3523,
+        );
+        expect(digitsToNumber([3, 5, 2, 3], 10)).toEqual(3523);
+        expect(digitsToNumber([3523], 3524)).toEqual(3523);
+        expect(digitsToNumber([3523, 3523, 3523, 3523], 3524)).toEqual(
+            154221029867775,
+        );
     });
 });

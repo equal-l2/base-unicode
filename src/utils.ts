@@ -26,3 +26,21 @@ export function convertToUnicodeBase(digits: number[]): string {
     }
     return result;
 }
+
+export function stringToDigits(input: string): number[] {
+    const len = input.length;
+    const result: number[] = [];
+    for (let i = 0; i < len; i++) {
+        const codepoint = input.charCodeAt(i);
+        result.push(conversionTable.indexOf(codepoint));
+    }
+    return result;
+}
+
+export function digitsToNumber(digits: number[], base: number): number {
+    let result = 0;
+    for (const digit of digits) {
+        result = result * base + digit;
+    }
+    return result;
+}
